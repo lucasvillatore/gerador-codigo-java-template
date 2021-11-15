@@ -1,0 +1,5 @@
+class {{ nomeClasse }} {
+    {% - for atributo in atributos %}
+        {{ atributo }}
+    {% - endfor %} 
+}
