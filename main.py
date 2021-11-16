@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 
 classes = {}
 
@@ -59,7 +59,10 @@ def monta_lista (nome_classe, chave, valor):
 
 def monta_dicionario(nome_classe, chave, valor):
     if chave not in classes[nome_classe]['dict']:
-        classes[nome_classe]['dict'].append(chave)
+        dicionario = {}
+        dicionario["tipo"] = chave
+        dicionario["variavel"] = chave.lower()
+        classes[nome_classe]['dict'].append(dicionario)
     monta_classes(chave, valor)
 
 def monta_classes(nome_classe, instancias):
@@ -93,9 +96,31 @@ def monta_classes(nome_classe, instancias):
                     monta_dicionario(nome_classe, chave, valor)
 
 def generate_java_code(dict: classes):
-    print(classes)
-    pass
+    
+    file_java = open("programa.java", "w+")
+    
+    file_loader = FileSystemLoader('./templates')
+    env = Environment(loader=file_loader)
+    env.trim_blocks = True
+    env.lstrip_blocks = True
+    env.rstrip_blocks = True
+    classe_template = env.get_template('classe.template')
 
+    file_java.write("import java.util.ArrayList;\n\n")
+    for classe in classes:
+        atributos = classes.get(classe)
+        output = classe_template.render(
+            nome_classe=classe, 
+            atributos_strings=atributos.get("str"), 
+            atributos_objetos=atributos.get("dict"), 
+            atributos_arrays=atributos.get("list")
+        )
+        file_java.write(output)
+    main_template = env.get_template("main.template")
+    output = main_template.render()
+
+    file_java.write(output)
+    file_java.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

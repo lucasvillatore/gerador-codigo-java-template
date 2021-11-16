@@ -1,5 +1,12 @@
-class {{ nomeClasse }} {
-    {% - for atributo in atributos %}
-        {{ atributo }}
-    {% - endfor %} 
+class {{ nome_classe }} {
+    {% for atributos_string in atributos_strings %}
+        String {{ atributos_string }};
+    {% endfor %}
+    {% for atributos_objeto in atributos_objetos %}
+        {{atributos_objeto["tipo"]}} {{ atributos_objeto["variavel"] }};
+    {% endfor %}
+    {% for atributos_list in atributos_arrays %}
+        ArrayList<{{ atributos_list["tipo"] }}> {{ atributos_list["variavel"] }};
+    {% endfor %}
 }
+

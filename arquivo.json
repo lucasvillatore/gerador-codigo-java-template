@@ -4,6 +4,10 @@
         "nome": "José",
         "cpf": "12341234",
         "telefone": "9999999",
+        "Teste": {
+          "campo_1": "campo",
+          "campo_2": "campo2"
+        },
         "Turma": [
           {
             "codigo": "CI1061",
